@@ -7,7 +7,8 @@ import Bar  from './Bar.js';
 const Home = () => {
   return (
     <View>
-      <Bar />
+      <Bar loggedInUser='batman123@gmail.com' />
+
       <Icons />
     </View>
   );
