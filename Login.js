@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Text, } from "react-native";
+import {
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  Text,
+} from "react-native";
 
 const sendText = async (phoneNumber) => {
   // using fetch do a POST to https://dev.stedi.me/twofactorlogin
@@ -10,31 +16,49 @@ const sendText = async (phoneNumber) => {
       headers: {
         "Content-Type": "application/text",
       },
-    });
+    }
+  );
 
   const loginResponseText = await loginResponse.text(); //converts the promist to a string by using await
-  console.log("Login Response", loginResponse.text());
-
+  console.log("Login Response", loginResponseText);
 };
 
-const getToken = async ({ phoneNumber, oneTimePassword }) => {//THIS CODE IS NOT COMPLETE JUST SHOWING HOW TO A POST WITH A BODY
-  console.log("PhoneNumber", phoneNumber);
-  console.log("OTP", oneTimePassword);
-  const loginResponse = await fetch("https://dev.stedi.me/twofactorlogin/", {
+const getToken = async ({ phoneNumber, oneTimePassword, setUserLoggedIn }) => {
+  //THIS CODE IS NOT COMPLETE JUST SHOWING HOW TO A POST WITH A BODY
+  // console.log("PhoneNumber", phoneNumber);
+  // console.log("OTP", oneTimePassword);
+  const loginResponse = await fetch("https://dev.stedi.me/twofactorlogin", {
     method: "POST",
+    body: JSON.stringify({ oneTimePassword, phoneNumber }),
     headers: {
       "content-type": "application/json",
     },
-    body: {
-      phoneNumber,
-      oneTimePassword
-    },
+    // body: {
+    //   phoneNumber,
+    //   oneTimePassword
+    // },
   });
+  const responseCode = loginResponse.status;
+  if (responseCode == 200) {
+    setUserLoggedIn(true);
+  }
+
+  // const loginResponse = await fetch("https://dev.stedi.me/twofactorlogin/", {
+  //   method: "POST",
+  //   body:JSON.sstringify({oneTimePassword, phoneNumber}),
+  //   headers: {
+  //     "content-type": "application/json",
+  //   },
+  //   // body: {
+  //   //   phoneNumber,
+  //   //   oneTimePassword
+  //   // },
+  // });
   const token = await loginResponse.text();
   console.log(token);
 };
 
-const Login = () => {
+const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oneTimePassword, setOneTimePassword] = useState(null);
 
@@ -67,7 +91,11 @@ const Login = () => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          sendText(phoneNumber);
+          getToken({
+            phoneNumber,
+            oneTimePassword,
+            setUserLoggedIn: props.setUserLoggedIn,
+          });
         }}
       >
         <Text>Login</Text>
