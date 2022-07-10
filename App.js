@@ -32,6 +32,9 @@ export default function App() {
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="home" color={color} size={26} />
               ),
+                setUserLoggedIn: (props) => (
+                  setUserLoggedIn = {setUserLoggedIn}
+                 )
             }}
           />
           <Tab.Screen

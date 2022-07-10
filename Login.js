@@ -23,7 +23,12 @@ const sendText = async (phoneNumber) => {
   console.log("Login Response", loginResponseText);
 };
 
-const getToken = async ({ phoneNumber, oneTimePassword, setUserLoggedIn }) => {
+const getToken = async ({
+  phoneNumber,
+  oneTimePassword,
+  setUserLoggedIn,
+  setUserToken,
+}) => {
   //THIS CODE IS NOT COMPLETE JUST SHOWING HOW TO A POST WITH A BODY
   // console.log("PhoneNumber", phoneNumber);
   // console.log("OTP", oneTimePassword);
@@ -33,14 +38,12 @@ const getToken = async ({ phoneNumber, oneTimePassword, setUserLoggedIn }) => {
     headers: {
       "content-type": "application/json",
     },
-    // body: {
-    //   phoneNumber,
-    //   oneTimePassword
-    // },
   });
   const responseCode = loginResponse.status;
+  console.log("Response Code", responseCode);
   if (responseCode == 200) {
     setUserLoggedIn(true);
+    setUserToken(loginResponse);
   }
 
   // const loginResponse = await fetch("https://dev.stedi.me/twofactorlogin/", {
